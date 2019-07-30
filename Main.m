@@ -1,13 +1,20 @@
 function Main()
 
 % Loading the parameters of the experimental EBSP
-
+%Adding paths
+% addpath(genpath('mtex_git\mtex_git')) 
+% addpath(genpath('AstroEBSD_20190326\AstroEBSD')) 
+% addpath(genpath('LoadPatterns')) 
+% addpath(genpath('EBSD2019_workshops_ mtex\upload'))
 location_astro='C:\Users\33643\Desktop\Materials Science\Project\AstroEBSD\';
 run(fullfile(location_astro,'start_AstroEBSD.m'));
+location_mtex='C:\Users\33643\Desktop\Materials Science\Project\Matlab\mtex\'; %Change this to where you keep your MTEX folder
+run(fullfile(location_mtex,'startup_mtex.m'));
 InputUser.HDF5_folder='C:\Users\33643\Desktop\Materials Science\Project\Data'; %Change this to the file location in whch you have saved the example data
 InputUser.HDF5_file='Demo_Ben_16bin.h5';
 InputUser.Phase_Input  = {'Ferrite'};
 Settings_PCin.start=[0.5010 0.4510 0.5870]; %Fe
+SF = 4;
 [ MapData,MicroscopeData,PhaseData,EBSPData ] = bReadHDF5( InputUser );
 
 addpath(genpath('LoadPatterns')) 
@@ -42,7 +49,7 @@ if isfile('library.h5')
     h5disp('library.h5');
     H5F.close(fid); 
 else
-    [Euler,EBSPs] = Generate_library(PC_av,screensize);
+    [Euler,EBSPs] = Generate_library(PC_av,screensize,SF);
     h5create('library.h5','/EBSP',size(EBSPs))
     size(EBSPs)
     size(Euler)

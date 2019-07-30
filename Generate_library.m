@@ -1,4 +1,4 @@
-function [Euler,EBSPs] = Generate_library(PC_av,screensize)
+function [Euler,EBSPs] = Generate_library(PC_av,screensize,SF)
 
 % This function returns an array of Euler angles with the corresponding
 % EBSPs
@@ -12,7 +12,7 @@ addpath(genpath('EBSD2019_workshops_ mtex\upload'))
 cs = loadCIF('Fe-Iron-alpha.cif');
 
 %Generating the orientation matrices
-Sampling_Freq = 7; %10 gives ~ 900 patterns, 7 gives~1500 patterns and 2.5 gives ~ 40000 patterns
+Sampling_Freq = SF; %10 gives ~ 900 patterns, 7 gives~1500 patterns and 2.5 gives ~ 40000 patterns
 [ library_G,Euler ] = SO3_rotmat_gen(cs,Sampling_Freq);
 
 %The parameters to choose are:
