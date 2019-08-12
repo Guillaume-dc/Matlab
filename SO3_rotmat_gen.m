@@ -32,5 +32,9 @@ function [ G_array,Euler ] = SO3_rotmat_gen( cs,SO3_resolution)
 
 S3G = equispacedSO3Grid(cs,'resolution',SO3_resolution*pi/180); %Create the euler angles that define the fundamental xone we're searching, equispacedSO3Grid is an MTEX command
 G_array=S3G.matrix;
-Euler = reshape([rad2deg(wrapToPi(S3G.phi1)) rad2deg(wrapToPi(S3G.Phi)) rad2deg(wrapToPi(S3G.phi2))],[length(S3G.Phi) 3]);
+%Euler = reshape([rad2deg(wrapToPi(S3G.phi1)) rad2deg(wrapToPi(S3G.Phi)) rad2deg(wrapToPi(S3G.phi2))],[length(S3G.Phi) 3]);
+%Euler = reshape([rad2deg(S3G.phi1) rad2deg(S3G.Phi) rad2deg(S3G.phi2)],[length(S3G.Phi) 3]);
+%Euler = reshape([wrapToPi(S3G.phi1) wrapToPi(S3G.Phi) wrapToPi(S3G.phi2)],[length(S3G.Phi) 3]);
+Euler = S3G.Euler;
+Euler = rad2deg(Euler);
 end

@@ -1,11 +1,7 @@
 function Main()
 
-% Loading the parameters of the experimental EBSP
-%Adding paths
-% addpath(genpath('mtex_git\mtex_git')) 
-% addpath(genpath('AstroEBSD_20190326\AstroEBSD')) 
-% addpath(genpath('LoadPatterns')) 
-% addpath(genpath('EBSD2019_workshops_ mtex\upload'))
+% Loading the parameters of the experimental EBSPs
+
 location_astro='C:\Users\33643\Desktop\Materials Science\Project\AstroEBSD\';
 run(fullfile(location_astro,'start_AstroEBSD.m'));
 location_mtex='C:\Users\33643\Desktop\Materials Science\Project\Matlab\mtex\'; %Change this to where you keep your MTEX folder
@@ -14,13 +10,14 @@ InputUser.HDF5_folder='C:\Users\33643\Desktop\Materials Science\Project\Data'; %
 InputUser.HDF5_file='Demo_Ben_16bin.h5';
 InputUser.Phase_Input  = {'Ferrite'};
 Settings_PCin.start=[0.5010 0.4510 0.5870]; %Fe
-SF = 4;
+SF = 2.5;
+
 [ MapData,MicroscopeData,PhaseData,EBSPData ] = bReadHDF5( InputUser );
 
 addpath(genpath('LoadPatterns')) 
 [EBSP_BG] = Simulated_EBSP(EBSPData,1);
 screensize = length(EBSP_BG);
-PC_av = [0.5010 0.4510 0.5870];
+PC_av = Settings_PCin.start;
 
 % Creating a file of experimental EBSPs if there is no file 'exp_EBSP.h5'
 
@@ -49,13 +46,11 @@ if isfile('library.h5')
     h5disp('library.h5');
     H5F.close(fid); 
 else
-    [Euler,EBSPs] = Generate_library(PC_av,screensize,SF);
+    [Eulers,EBSPs] = Generate_library(PC_av,screensize,SF);
     h5create('library.h5','/EBSP',size(EBSPs))
-    size(EBSPs)
-    size(Euler)
     h5write('library.h5','/EBSP',reshape(EBSPs,size(EBSPs)))
-    h5create('library.h5','/Euler_Angles',[length(Euler) 3])
-    h5write('library.h5','/Euler_Angles',reshape(Euler,[length(Euler) 3]))
+    h5create('library.h5','/Euler_Angles',[length(Eulers) 3])
+    h5write('library.h5','/Euler_Angles',reshape(Eulers,[length(Eulers) 3]))
     h5create('library.h5','/PatternCenter',[length(PC_av) 1])
     h5write('library.h5','/PatternCenter',reshape(PC_av,[length(PC_av) 1]))
     fid = H5F.open('library.h5');
